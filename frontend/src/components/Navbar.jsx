@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi';
+import { useTheme } from '../context/ThemeContext';
 
 const navLinks = [
     { label: 'Home', href: '#home' },
@@ -13,6 +14,7 @@ const navLinks = [
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -38,7 +40,7 @@ const Navbar = () => {
                     <span className="text-primary">/&gt;</span>
                 </a>
 
-                {/* Desktop Links */}
+                {/* Desktop Links + Theme Toggle */}
                 <div className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => (
                         <a
@@ -49,16 +51,32 @@ const Navbar = () => {
                             {link.label}
                         </a>
                     ))}
+                    <button
+                        onClick={toggleTheme}
+                        className="p-2 rounded-lg glass text-text-secondary hover:text-primary transition-all duration-300 hover:scale-110"
+                        aria-label="Toggle theme"
+                    >
+                        {theme === 'dark' ? <FiSun className="text-lg" /> : <FiMoon className="text-lg" />}
+                    </button>
                 </div>
 
-                {/* Mobile Toggle */}
-                <button
-                    onClick={() => setMobileOpen(!mobileOpen)}
-                    className="md:hidden text-text-primary text-2xl"
-                    aria-label="Toggle menu"
-                >
-                    {mobileOpen ? <FiX /> : <FiMenu />}
-                </button>
+                {/* Mobile Buttons */}
+                <div className="flex md:hidden items-center gap-3">
+                    <button
+                        onClick={toggleTheme}
+                        className="p-2 rounded-lg glass text-text-secondary hover:text-primary transition-all duration-300"
+                        aria-label="Toggle theme"
+                    >
+                        {theme === 'dark' ? <FiSun /> : <FiMoon />}
+                    </button>
+                    <button
+                        onClick={() => setMobileOpen(!mobileOpen)}
+                        className="text-text-primary text-2xl"
+                        aria-label="Toggle menu"
+                    >
+                        {mobileOpen ? <FiX /> : <FiMenu />}
+                    </button>
+                </div>
             </div>
 
             {/* Mobile Menu */}

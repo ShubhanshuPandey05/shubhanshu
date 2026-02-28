@@ -19,7 +19,21 @@
   --color-text-muted: #64748b;
 }
 
-/* Base Styles */
+/* =================== LIGHT THEME OVERRIDES =================== */
+html.light {
+  --color-dark-900: #f8fafc;
+  --color-dark-800: #f1f5f9;
+  --color-dark-700: #e2e8f0;
+  --color-dark-600: #cbd5e1;
+  --color-dark-500: #94a3b8;
+  --color-glass: rgba(0, 0, 0, 0.04);
+  --color-glass-border: rgba(0, 0, 0, 0.08);
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+}
+
+/* =================== BASE STYLES =================== */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--color-dark-500) transparent;
@@ -35,15 +49,18 @@ body {
   color: var(--color-text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Custom scrollbar for webkit */
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--color-dark-500);
   border-radius: 3px;
@@ -55,15 +72,22 @@ body {
   color: #fff;
 }
 
-/* Glassmorphism utility */
+html.light ::selection {
+  color: #0f172a;
+}
+
+/* =================== UTILITIES =================== */
+
+/* Glassmorphism */
 .glass {
   background: var(--color-glass);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--color-glass-border);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
-/* Gradient text utility */
+/* Gradient text */
 .gradient-text {
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
   -webkit-background-clip: text;
@@ -80,10 +104,29 @@ body {
   box-shadow: 0 0 30px rgba(6, 182, 212, 0.25);
 }
 
+html.light .glow {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+html.light .glow-hover:hover {
+  box-shadow: 0 0 30px rgba(6, 182, 212, 0.15);
+}
+
 /* Animated grid background */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 60px 60px;
+}
+
+html.light .bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+
+/* Smooth transition for theme-aware elements */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
