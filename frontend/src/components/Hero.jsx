@@ -49,16 +49,20 @@ const MagneticButton = ({ children, href, className }) => {
     }, [x, y]);
 
     return (
-        <motion.a
+        <motion.button
             ref={ref}
-            href={href}
+            onClick={() => {
+                document.getElementById(href).scrollIntoView({
+                    behavior: "smooth"
+                })
+            }}
             onMouseMove={handleMouse}
             onMouseLeave={handleLeave}
             style={{ x: springX, y: springY }}
             className={className}
         >
             {children}
-        </motion.a>
+        </motion.button>
     );
 };
 
@@ -257,14 +261,14 @@ const Hero = ({ about }) => {
                         </MagneticButton>
                     ) : (
                         <MagneticButton
-                            href="#projects"
+                            href="projects"
                             className="px-8 py-3 bg-gradient-to-r from-primary to-accent text-dark-900 font-semibold rounded-lg hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 inline-block"
                         >
                             View My Work
                         </MagneticButton>
                     )}
                     <MagneticButton
-                        href="#contact"
+                        href="contact"
                         className="px-8 py-3 glass rounded-lg text-text-primary font-medium hover:bg-white/10 transition-all duration-300 inline-block"
                     >
                         Get In Touch
@@ -273,15 +277,19 @@ const Hero = ({ about }) => {
             </div>
 
             {/* Scroll indicator */}
-            <motion.a
-                href="#about"
+            <motion.button
+                onClick={() => {
+                    document.getElementById("about").scrollIntoView({
+                        behavior: "smooth"
+                    })
+                }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, y: [0, 8, 0] }}
                 transition={{ delay: 1.5, y: { repeat: Infinity, duration: 2 } }}
                 className="absolute bottom-10 text-text-muted hover:text-primary transition-colors"
             >
                 <FiArrowDown className="text-2xl" />
-            </motion.a>
+            </motion.button>
         </section>
     );
 };

@@ -4,11 +4,11 @@ import { FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 
 const navLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Home', href: 'home' },
+    { label: 'About', href: 'about' },
+    { label: 'Skills', href: 'skills' },
+    { label: 'Projects', href: 'projects' },
+    { label: 'Contact', href: 'contact' },
 ];
 
 const Navbar = () => {
@@ -28,28 +28,35 @@ const Navbar = () => {
             animate={{ y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                    ? 'bg-dark-900/80 backdrop-blur-xl border-b border-glass-border shadow-lg'
-                    : 'bg-transparent'
+                ? 'bg-dark-900/80 backdrop-blur-xl border-b border-glass-border shadow-lg'
+                : 'bg-transparent'
                 }`}
         >
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
                 {/* Logo */}
-                <a href="#home" className="text-xl font-bold font-mono">
+                <button onClick={() => {
+                    document.getElementById("home").scrollIntoView({
+                        behavior: "smooth"
+                    })
+                }} className="text-xl font-bold font-mono">
                     <span className="text-primary">&lt;</span>
                     <span className="text-text-primary">Dev</span>
                     <span className="text-primary">/&gt;</span>
-                </a>
+                </button>
 
                 {/* Desktop Links + Theme Toggle */}
                 <div className="hidden md:flex items-center gap-8">
                     {navLinks.map((link) => (
-                        <a
-                            key={link.href}
-                            href={link.href}
+                        <button
+                            onClick={() => {
+                                document.getElementById(link.href).scrollIntoView({
+                                    behavior: "smooth"
+                                })
+                            }}
                             className="text-text-secondary hover:text-primary transition-colors duration-300 text-sm font-medium tracking-wide"
                         >
                             {link.label}
-                        </a>
+                        </button>
                     ))}
                     <button
                         onClick={toggleTheme}
@@ -88,14 +95,17 @@ const Navbar = () => {
                 >
                     <div className="px-6 py-4 flex flex-col gap-4">
                         {navLinks.map((link) => (
-                            <a
-                                key={link.href}
-                                href={link.href}
-                                onClick={() => setMobileOpen(false)}
+                            <button
+                                onClick={() => {
+                                    document.getElementById(link.href).scrollIntoView({
+                                        behavior: "smooth"
+                                    })
+                                    setMobileOpen(false)
+                                }}
                                 className="text-text-secondary hover:text-primary transition-colors duration-300 text-sm font-medium"
                             >
                                 {link.label}
-                            </a>
+                            </button>
                         ))}
                     </div>
                 </motion.div>
