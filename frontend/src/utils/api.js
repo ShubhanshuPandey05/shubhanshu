@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: '/api',
+    baseURL: `https://shubhanshupandey05.vercel.app/api`,
 });
 
 // Add auth token to requests if available
