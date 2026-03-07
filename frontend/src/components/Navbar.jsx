@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 
 const navLinks = [
-    { label: 'Home', href: 'home' },
-    { label: 'About', href: 'about' },
-    { label: 'Skills', href: 'skills' },
-    { label: 'Projects', href: 'projects' },
-    { label: 'Contact', href: 'contact' },
+    { label: 'About', href: 'about', type: 'scroll' },
+    { label: 'Work', href: '/#/work', type: 'route' },
+    { label: 'Blog', href: '/#/blog', type: 'route' },
+    { label: 'Contact', href: 'contact', type: 'scroll' },
 ];
 
 const Navbar = () => {
@@ -22,94 +21,107 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const handleNavClick = (link) => {
+        if (link.type === 'route') {
+            window.location.href = link.href;
+        } else {
+            const el = document.getElementById(link.href);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                window.location.href = `/#/`;
+                setTimeout(() => {
+                    document.getElementById(link.href)?.scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
+        }
+    };
+
     return (
         <motion.nav
             initial={{ y: -100 }}
             animate={{ y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
-                ? 'bg-dark-900/80 backdrop-blur-xl border-b border-glass-border shadow-lg'
+            transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+                ? 'bg-bg-primary/90 backdrop-blur-md border-b border-border'
                 : 'bg-transparent'
                 }`}
         >
-            <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 py-5 flex items-center justify-between">
                 {/* Logo */}
-                <button onClick={() => {
-                    document.getElementById("home").scrollIntoView({
-                        behavior: "smooth"
-                    })
-                }} className="text-xl font-bold font-mono">
-                    <span className="text-primary">&lt;</span>
-                    <span className="text-text-primary">Dev</span>
-                    <span className="text-primary">/&gt;</span>
-                </button>
+                <a
+                    href="/#/"
+                    className="font-serif text-xl md:text-2xl font-bold tracking-tight text-text-primary hover:text-accent transition-colors duration-300"
+                >
+                    SP<span className="text-accent">.</span>
+                </a>
 
-                {/* Desktop Links + Theme Toggle */}
-                <div className="hidden md:flex items-center gap-8">
+                {/* Desktop Links */}
+                <div className="hidden md:flex items-center gap-10">
                     {navLinks.map((link) => (
                         <button
-                            onClick={() => {
-                                document.getElementById(link.href).scrollIntoView({
-                                    behavior: "smooth"
-                                })
-                            }}
-                            className="text-text-secondary hover:text-primary transition-colors duration-300 text-sm font-medium tracking-wide"
+                            key={link.label}
+                            onClick={() => handleNavClick(link)}
+                            className="text-caption text-text-muted hover:text-text-primary transition-colors duration-300"
                         >
                             {link.label}
                         </button>
                     ))}
                     <button
                         onClick={toggleTheme}
-                        className="p-2 rounded-lg glass text-text-secondary hover:text-primary transition-all duration-300 hover:scale-110"
+                        className="p-2 text-text-muted hover:text-text-primary transition-colors duration-300"
                         aria-label="Toggle theme"
                     >
-                        {theme === 'dark' ? <FiSun className="text-lg" /> : <FiMoon className="text-lg" />}
+                        {theme === 'dark' ? <FiSun size={16} /> : <FiMoon size={16} />}
                     </button>
                 </div>
 
-                {/* Mobile Buttons */}
+                {/* Mobile buttons */}
                 <div className="flex md:hidden items-center gap-3">
                     <button
                         onClick={toggleTheme}
-                        className="p-2 rounded-lg glass text-text-secondary hover:text-primary transition-all duration-300"
+                        className="p-2 text-text-muted hover:text-text-primary transition-colors"
                         aria-label="Toggle theme"
                     >
-                        {theme === 'dark' ? <FiSun /> : <FiMoon />}
+                        {theme === 'dark' ? <FiSun size={16} /> : <FiMoon size={16} />}
                     </button>
                     <button
                         onClick={() => setMobileOpen(!mobileOpen)}
-                        className="text-text-primary text-2xl"
+                        className="text-text-primary"
                         aria-label="Toggle menu"
                     >
-                        {mobileOpen ? <FiX /> : <FiMenu />}
+                        {mobileOpen ? <FiX size={22} /> : <FiMenu size={22} />}
                     </button>
                 </div>
             </div>
 
             {/* Mobile Menu */}
-            {mobileOpen && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="md:hidden bg-dark-800/95 backdrop-blur-xl border-b border-glass-border"
-                >
-                    <div className="px-6 py-4 flex flex-col gap-4">
-                        {navLinks.map((link) => (
-                            <button
-                                onClick={() => {
-                                    document.getElementById(link.href).scrollIntoView({
-                                        behavior: "smooth"
-                                    })
-                                    setMobileOpen(false)
-                                }}
-                                className="text-text-secondary hover:text-primary transition-colors duration-300 text-sm font-medium"
-                            >
-                                {link.label}
-                            </button>
-                        ))}
-                    </div>
-                </motion.div>
-            )}
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="md:hidden bg-bg-primary border-b border-border overflow-hidden"
+                    >
+                        <div className="px-6 py-6 flex flex-col gap-5">
+                            {navLinks.map((link) => (
+                                <button
+                                    key={link.label}
+                                    onClick={() => {
+                                        handleNavClick(link);
+                                        setMobileOpen(false);
+                                    }}
+                                    className="text-caption text-text-muted hover:text-text-primary transition-colors text-left"
+                                >
+                                    {link.label}
+                                </button>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.nav>
     );
 };
